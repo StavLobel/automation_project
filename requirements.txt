@@ -1,0 +1,6 @@
+pytest
+selenium
+webdriver-manager
+black
+python-dotenv
+pre-commit
