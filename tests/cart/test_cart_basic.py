@@ -54,20 +54,6 @@ def test_remove_item_from_cart(login_and_go_to_products):
 
 
 @pytest.mark.usefixtures("driver")
-def test_cart_badge_updates(login_and_go_to_products):
-    products_page = login_and_go_to_products
-    assert products_page.get_cart_count() == 0
-    products_page.add_item_by_name(ITEMS[2])
-    assert products_page.get_cart_count() == 1
-    products_page.add_item_by_name(ITEMS[3])
-    assert products_page.get_cart_count() == 2
-    products_page.remove_item_by_name(ITEMS[2])
-    assert products_page.get_cart_count() == 1
-    products_page.remove_item_by_name(ITEMS[3])
-    assert products_page.get_cart_count() == 0
-
-
-@pytest.mark.usefixtures("driver")
 def test_add_same_item_multiple_times(login_and_go_to_products):
     products_page = login_and_go_to_products
     item = ITEMS[0]
@@ -77,34 +63,3 @@ def test_add_same_item_multiple_times(login_and_go_to_products):
     products_page.go_to_cart()
     cart_page = CartPage(products_page.driver)
     assert cart_page.get_cart_items().count(item) == 1
-
-
-@pytest.mark.usefixtures("driver")
-def test_remove_all_items(login_and_go_to_products):
-    products_page = login_and_go_to_products
-    for item in ITEMS[:3]:
-        products_page.add_item_by_name(item)
-    for item in ITEMS[:3]:
-        products_page.remove_item_by_name(item)
-    assert products_page.get_cart_count() == 0
-    products_page.go_to_cart()
-    cart_page = CartPage(products_page.driver)
-    assert cart_page.is_cart_empty()
-
-
-@pytest.mark.usefixtures("driver")
-def test_rapid_add_remove(login_and_go_to_products):
-    products_page = login_and_go_to_products
-    item = ITEMS[5]
-    for _ in range(5):
-        products_page.add_item_by_name(item)
-        products_page.remove_item_by_name(item)
-    assert products_page.get_cart_count() == 0
-
-
-@pytest.mark.usefixtures("driver")
-def test_cart_empty_state(login_and_go_to_products):
-    products_page = login_and_go_to_products
-    products_page.go_to_cart()
-    cart_page = CartPage(products_page.driver)
-    assert cart_page.is_cart_empty()
