@@ -18,27 +18,29 @@ Automated UI testing for [SauceDemo](https://www.saucedemo.com) using **Python**
 
 ## 📁 Project Structure
 
-```
-├── src/
-│   └── pages/
-│       ├── base_page.py
-│       ├── login_page.py
-│       ├── products_page.py
-│       └── cart_page.py
-├── tests/
-│   ├── conftest.py         # Global fixtures
-│   ├── login/
-│   │   └── test_login.py
-│   └── cart/
-│       ├── conftest.py     # Cart-specific fixtures
-│       ├── test_cart_basic.py
-│       ├── test_cart_edge.py
-│       └── test_cart_persistence.py
-├── .github/workflows/ci.yml
-├── requirements.txt
-├── .pre-commit-config.yaml
-├── .env (not committed)
-└── README.md
+```text
+src/
+  └── pages/
+      ├── base_page.py         # Base class for all page objects
+      ├── login_page.py        # Login page object
+      ├── products_page.py     # Products/inventory page object
+      └── cart_page.py         # Cart page object
+
+tests/
+  ├── conftest.py             # Global fixtures
+  ├── login/
+  │   └── test_login.py       # Login test suite
+  └── cart/
+      ├── conftest.py         # Cart-specific fixtures
+      ├── test_cart_basic.py  # Basic cart tests
+      ├── test_cart_edge.py   # Cart edge case tests
+      └── test_cart_persistence.py # Cart persistence tests
+
+.github/workflows/ci.yml      # GitHub Actions workflow
+requirements.txt              # Python dependencies
+.pre-commit-config.yaml       # Pre-commit hooks config
+.env (not committed)          # Environment variables
+README.md                     # Project documentation
 ```
 
 ---
@@ -64,7 +66,7 @@ Automated UI testing for [SauceDemo](https://www.saucedemo.com) using **Python**
 
 ---
 
-## 🧪 Running Tests
+## 🤖 Running Tests
 
 - **All tests:**
   ```bash
@@ -92,7 +94,7 @@ Automated UI testing for [SauceDemo](https://www.saucedemo.com) using **Python**
 
 ---
 
-## 🧩 Features & Test Coverage
+## 🧪 Features & Test Coverage
 
 ### 🔑 Login
 - Valid login
@@ -106,7 +108,7 @@ Automated UI testing for [SauceDemo](https://www.saucedemo.com) using **Python**
 
 ---
 
-## 🧑‍💻 Contributing
+## 👩‍💻 Contributing
 
 1. Fork the repo & create a branch
 2. Install pre-commit hooks:
