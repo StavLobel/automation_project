@@ -35,7 +35,7 @@ jobs:
 
       - name: Run tests and generate JUnit and HTML reports
         run: |
-          python -m pytest tests/ --junitxml=pytest-report.xml --html=pytest-report.html --self-contained-html
+          python -m pytest tests/ --junitxml=pytest-report.xml --html=pytest-report.html --self-contained-html --capture=tee-sys
 
       - name: Upload JUnit XML report artifact
         uses: actions/upload-artifact@v4
