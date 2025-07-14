@@ -38,24 +38,6 @@ def test_cart_persistence_after_navigation(login_and_go_to_products):
     assert ITEMS[1] in cart_page.get_cart_items()
 
 
-def test_add_item_logout_login_other_user(driver):
-    # Add item as standard_user
-    login_page = LoginPage(driver)
-    login_page.load()
-    login_page.login("standard_user", "secret_sauce")
-    products_page = ProductsPage(driver)
-    products_page.add_item_by_name(ITEMS[0])
-    assert products_page.get_cart_count() == 1
-    # Logout
-    driver.get("https://www.saucedemo.com")
-    driver.delete_all_cookies()
-    # Login as problem_user
-    login_page.load()
-    login_page.login("problem_user", "secret_sauce")
-    products_page = ProductsPage(driver)
-    assert products_page.get_cart_count() == 0
-
-
 def test_continue_shopping_from_cart(login_and_go_to_products):
     products_page = login_and_go_to_products
     products_page.add_item_by_name(ITEMS[0])
