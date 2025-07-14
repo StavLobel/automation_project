@@ -32,6 +32,12 @@ jobs:
           echo "SAUCE_USERNAME=${{ secrets.SAUCE_USERNAME }}" >> $GITHUB_ENV
           echo "SAUCE_PASSWORD=${{ secrets.SAUCE_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Run tests
+      - name: Run tests and generate JUnit report
         run: |
-          python -m pytest tests/ 
+          python -m pytest tests/ --junitxml=pytest-report.xml
+
+      - name: Upload test report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: pytest-report.xml 
