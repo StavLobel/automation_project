@@ -38,12 +38,14 @@ jobs:
           python -m pytest tests/ --junitxml=pytest-report.xml --html=pytest-report.html --self-contained-html --capture=tee-sys --log-cli-level=INFO
 
       - name: Upload JUnit XML report artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-report-xml
           path: pytest-report.xml
 
       - name: Upload HTML report artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-report-html
