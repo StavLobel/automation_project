@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from .base_page import BasePage
+import re
 
 
 class ProductsPage(BasePage):
@@ -13,16 +14,24 @@ class ProductsPage(BasePage):
     def load(self):
         self.driver.get(self.URL)
 
+    def _data_test_value(self, prefix, item_name):
+        # Only lowercase and replace spaces with hyphens, preserve all other characters
+        return f"{prefix}{item_name.lower().replace(' ', '-')}"
+
     def add_item_by_name(self, item_name):
         items = self.driver.find_elements(*self.ITEM_NAMES)
         for item in items:
             if item.text == item_name:
                 parent = item.find_element(By.XPATH, "../../..")
-                add_btn = parent.find_element(
-                    By.XPATH, ".//button[contains(@id, 'add-to-cart')]"
-                )
-                add_btn.click()
-                return True
+                data_test = self._data_test_value("add-to-cart-", item_name)
+                try:
+                    add_btn = parent.find_element(
+                        By.XPATH, f".//button[@data-test='{data_test}']"
+                    )
+                    add_btn.click()
+                    return True
+                except Exception:
+                    return False
         return False
 
     def remove_item_by_name(self, item_name):
@@ -30,11 +39,15 @@ class ProductsPage(BasePage):
         for item in items:
             if item.text == item_name:
                 parent = item.find_element(By.XPATH, "../../..")
-                remove_btn = parent.find_element(
-                    By.XPATH, ".//button[contains(@id, 'remove')]"
-                )
-                remove_btn.click()
-                return True
+                data_test = self._data_test_value("remove-", item_name)
+                try:
+                    remove_btn = parent.find_element(
+                        By.XPATH, f".//button[@data-test='{data_test}']"
+                    )
+                    remove_btn.click()
+                    return True
+                except Exception:
+                    return False
         return False
 
     def get_cart_count(self):
