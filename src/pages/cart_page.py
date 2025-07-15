@@ -25,11 +25,22 @@ class CartPage(BasePage):
 
     def get_cart_items(self):
         """Return a list of item names currently in the cart."""
-        cart_items = self.driver.find_elements(*self.CART_ITEMS)
+        import logging
+
+        logger = logging.getLogger(__name__)
+        cart_items = self.driver.find_elements(By.CSS_SELECTOR, ".cart_item")
         names = []
         for cart_item in cart_items:
-            name_elem = cart_item.find_element(By.CLASS_NAME, "inventory_item_name")
-            names.append(name_elem.text)
+            try:
+                name_elem = cart_item.find_element(
+                    By.CSS_SELECTOR, '[data-test="inventory-item-name"]'
+                )
+                names.append(name_elem.text)
+            except Exception as e:
+                logger.warning(
+                    f"[get_cart_items] Could not find item name in cart_item: {e}"
+                )
+        logger.info(f"[get_cart_items] Found {len(names)} items in cart: {names}")
         return names
 
     def _data_test_value(self, prefix, item_name):
