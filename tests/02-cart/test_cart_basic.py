@@ -21,7 +21,8 @@ ITEMS = [
 ]
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.cart
+@pytest.mark.smoke
 def test_add_single_item_to_cart(login_and_go_to_products):
     """
     Description: Test adding a single item to the cart and verifying it appears in the cart.
@@ -42,7 +43,7 @@ def test_add_single_item_to_cart(login_and_go_to_products):
     logger.info("[test_add_single_item_to_cart] Item found in cart. Test passed.")
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.cart
 def test_add_multiple_items_to_cart(login_and_go_to_products):
     """
     Description: Test adding multiple items to the cart and verifying all appear in the cart.
@@ -67,7 +68,7 @@ def test_add_multiple_items_to_cart(login_and_go_to_products):
     )
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.cart
 def test_remove_item_from_cart(login_and_go_to_products):
     """
     Description: Test removing an item from the cart and verifying it no longer appears.
@@ -88,7 +89,7 @@ def test_remove_item_from_cart(login_and_go_to_products):
     logger.info("[test_remove_item_from_cart] Item not found in cart. Test passed.")
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.cart
 def test_add_same_item_multiple_times(login_and_go_to_products):
     """
     Description: Test adding the same item multiple times does not duplicate it in the cart.

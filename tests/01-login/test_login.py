@@ -14,7 +14,8 @@ SAUCE_USERNAME = os.getenv("SAUCE_USERNAME")
 SAUCE_PASSWORD = os.getenv("SAUCE_PASSWORD")
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.login
+@pytest.mark.smoke
 def test_login_valid(driver):
     """
     Description: Test logging in with valid credentials.
@@ -33,7 +34,7 @@ def test_login_valid(driver):
     logger.info("[test_login_valid] Login successful, inventory page loaded")
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.login
 def test_login_invalid(driver):
     """
     Description: Test logging in with invalid credentials.
@@ -60,6 +61,7 @@ def test_login_invalid(driver):
     logger.info("[test_login_invalid] Error message assertion passed")
 
 
+@pytest.mark.login
 def test_login_empty_fields(driver):
     """
     Description: Test logging in with empty username and password fields.
@@ -82,6 +84,7 @@ def test_login_empty_fields(driver):
     logger.info("[test_login_empty_fields] Error message assertion passed")
 
 
+@pytest.mark.login
 def test_login_empty_username(driver):
     """
     Description: Test logging in with an empty username.
@@ -104,6 +107,7 @@ def test_login_empty_username(driver):
     logger.info("[test_login_empty_username] Error message assertion passed")
 
 
+@pytest.mark.login
 def test_login_empty_password(driver):
     """
     Description: Test logging in with an empty password.
@@ -126,6 +130,7 @@ def test_login_empty_password(driver):
     logger.info("[test_login_empty_password] Error message assertion passed")
 
 
+@pytest.mark.login
 def test_login_locked_out_user(driver):
     """
     Description: Test logging in as a locked out user.
@@ -150,6 +155,7 @@ def test_login_locked_out_user(driver):
     logger.info("[test_login_locked_out_user] Error message assertion passed")
 
 
+@pytest.mark.login
 def test_login_invalid_characters(driver):
     """
     Description: Test logging in with invalid/special characters in username and password.

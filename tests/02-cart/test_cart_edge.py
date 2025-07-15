@@ -4,6 +4,8 @@ import random
 from src.pages.cart_page import CartPage
 from src.pages.products_page import ProductsPage
 from src.pages.login_page import LoginPage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +19,7 @@ ITEMS = [
 ]
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.cart
 def test_remove_item_not_in_cart(login_and_go_to_products):
     """
     Description: Test removing an item that is not in the cart.
@@ -36,6 +38,8 @@ def test_remove_item_not_in_cart(login_and_go_to_products):
     logger.info("[test_remove_item_not_in_cart] Cart count is 0. Test passed.")
 
 
+@pytest.mark.cart
+@pytest.mark.slow
 def test_add_all_items_and_remove_all(login_and_go_to_products):
     """
     Description: Test adding all items to the cart and then removing all of them.
@@ -45,16 +49,22 @@ def test_add_all_items_and_remove_all(login_and_go_to_products):
         "[test_add_all_items_and_remove_all] Starting test: add all and remove all"
     )
     products_page = login_and_go_to_products
-    for item in ITEMS:
+    for idx, item in enumerate(ITEMS):
         logger.info(f"[test_add_all_items_and_remove_all] Adding item: {item}")
-        products_page.add_item_by_name(item)
+        assert products_page.add_item_by_name(item), f"Failed to add item: {item}"
+        WebDriverWait(products_page.driver, 5).until(
+            lambda d: products_page.get_cart_count() == idx + 1
+        )
     assert products_page.get_cart_count() == len(ITEMS)
     logger.info(
         f"[test_add_all_items_and_remove_all] Cart count after adds: {products_page.get_cart_count()}"
     )
-    for item in ITEMS:
+    for idx, item in enumerate(ITEMS[::-1]):
         logger.info(f"[test_add_all_items_and_remove_all] Removing item: {item}")
-        products_page.remove_item_by_name(item)
+        assert products_page.remove_item_by_name(item), f"Failed to remove item: {item}"
+        WebDriverWait(products_page.driver, 5).until(
+            lambda d: products_page.get_cart_count() == len(ITEMS) - (idx + 1)
+        )
     assert products_page.get_cart_count() == 0
     logger.info("[test_add_all_items_and_remove_all] Cart count is 0 after removes")
     products_page.go_to_cart()
@@ -67,6 +77,8 @@ def test_add_all_items_and_remove_all(login_and_go_to_products):
     logger.info("[test_add_all_items_and_remove_all] Cart is empty. Test passed.")
 
 
+@pytest.mark.cart
+@pytest.mark.slow
 def test_add_remove_random_order(login_and_go_to_products):
     """
     Description: Test adding and removing items in random order.
@@ -76,23 +88,30 @@ def test_add_remove_random_order(login_and_go_to_products):
     products_page = login_and_go_to_products
     items = ITEMS[:]
     random.shuffle(items)
-    for item in items:
+    for idx, item in enumerate(items):
         logger.info(f"[test_add_remove_random_order] Adding item: {item}")
-        products_page.add_item_by_name(item)
+        assert products_page.add_item_by_name(item), f"Failed to add item: {item}"
+        WebDriverWait(products_page.driver, 5).until(
+            lambda d: products_page.get_cart_count() == idx + 1
+        )
     assert products_page.get_cart_count() == len(ITEMS)
     logger.info(
         f"[test_add_remove_random_order] Cart count after adds: {products_page.get_cart_count()}"
     )
     random.shuffle(items)
-    for item in items:
+    for idx, item in enumerate(items):
         logger.info(f"[test_add_remove_random_order] Removing item: {item}")
-        products_page.remove_item_by_name(item)
+        assert products_page.remove_item_by_name(item), f"Failed to remove item: {item}"
+        WebDriverWait(products_page.driver, 5).until(
+            lambda d: products_page.get_cart_count() == len(ITEMS) - (idx + 1)
+        )
     assert products_page.get_cart_count() == 0
     logger.info(
         "[test_add_remove_random_order] Cart count is 0 after removes. Test passed."
     )
 
 
+@pytest.mark.cart
 def test_remove_item_twice(login_and_go_to_products):
     """
     Description: Test removing the same item twice.
@@ -111,6 +130,7 @@ def test_remove_item_twice(login_and_go_to_products):
     logger.info("[test_remove_item_twice] Cart count is 0. Test passed.")
 
 
+@pytest.mark.cart
 def test_cart_badge_not_visible_when_empty(login_and_go_to_products):
     """
     Description: Test that the cart badge is not visible when the cart is empty.
@@ -130,6 +150,8 @@ def test_cart_badge_not_visible_when_empty(login_and_go_to_products):
     )
 
 
+@pytest.mark.cart
+@pytest.mark.slow
 def test_cart_badge_updates_each_action(login_and_go_to_products):
     """
     Description: Test that the cart badge updates correctly after each add/remove action.
@@ -141,7 +163,10 @@ def test_cart_badge_updates_each_action(login_and_go_to_products):
     products_page = login_and_go_to_products
     for i, item in enumerate(ITEMS[:3], 1):
         logger.info(f"[test_cart_badge_updates_each_action] Adding item: {item}")
-        products_page.add_item_by_name(item)
+        assert products_page.add_item_by_name(item), f"Failed to add item: {item}"
+        WebDriverWait(products_page.driver, 5).until(
+            lambda d: products_page.get_cart_count() == i
+        )
         count = products_page.get_cart_count()
         logger.info(
             f"[test_cart_badge_updates_each_action] Cart count after add: {count}"
@@ -149,7 +174,10 @@ def test_cart_badge_updates_each_action(login_and_go_to_products):
         assert count == i
     for i, item in enumerate(reversed(ITEMS[:3]), 1):
         logger.info(f"[test_cart_badge_updates_each_action] Removing item: {item}")
-        products_page.remove_item_by_name(item)
+        assert products_page.remove_item_by_name(item), f"Failed to remove item: {item}"
+        WebDriverWait(products_page.driver, 5).until(
+            lambda d: products_page.get_cart_count() == 3 - i
+        )
         count = products_page.get_cart_count()
         logger.info(
             f"[test_cart_badge_updates_each_action] Cart count after remove: {count}"

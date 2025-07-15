@@ -16,7 +16,8 @@ ITEMS = [
 ]
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.cart
+@pytest.mark.slow
 def test_cart_persistence_after_refresh(login_and_go_to_products):
     """
     Description: Test that the cart retains items after a page refresh.
@@ -45,7 +46,8 @@ def test_cart_persistence_after_refresh(login_and_go_to_products):
     )
 
 
-@pytest.mark.usefixtures("driver")
+@pytest.mark.cart
+@pytest.mark.slow
 def test_cart_persistence_after_navigation(login_and_go_to_products):
     """
     Description: Test that the cart retains items after navigating away and back to the products page.
@@ -76,6 +78,8 @@ def test_cart_persistence_after_navigation(login_and_go_to_products):
     )
 
 
+@pytest.mark.cart
+@pytest.mark.slow
 def test_continue_shopping_from_cart(login_and_go_to_products):
     """
     Description: Test the 'Continue Shopping' button from the cart page.
@@ -102,6 +106,8 @@ def test_continue_shopping_from_cart(login_and_go_to_products):
     logger.info("[test_continue_shopping_from_cart] Test passed.")
 
 
+@pytest.mark.cart
+@pytest.mark.slow
 def test_checkout_and_return_to_cart(login_and_go_to_products):
     """
     Description: Test that items remain in the cart after starting checkout and returning to the cart page.
@@ -125,6 +131,8 @@ def test_checkout_and_return_to_cart(login_and_go_to_products):
     logger.info("[test_checkout_and_return_to_cart] Item found in cart. Test passed.")
 
 
+@pytest.mark.cart
+@pytest.mark.slow
 def test_cart_persistence_after_clearing_cookies(login_and_go_to_products):
     """
     Description: Test cart behavior after clearing cookies and refreshing.
