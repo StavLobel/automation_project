@@ -25,7 +25,12 @@ class CartPage(BasePage):
 
     def get_cart_items(self):
         """Return a list of item names currently in the cart."""
-        return [item.text for item in self.driver.find_elements(*self.ITEM_NAMES)]
+        cart_items = self.driver.find_elements(*self.CART_ITEMS)
+        names = []
+        for cart_item in cart_items:
+            name_elem = cart_item.find_element(By.CLASS_NAME, "inventory_item_name")
+            names.append(name_elem.text)
+        return names
 
     def _data_test_value(self, prefix, item_name):
         """Generate the data-test attribute value for remove buttons."""

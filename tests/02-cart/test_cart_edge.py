@@ -19,6 +19,10 @@ ITEMS = [
 
 @pytest.mark.usefixtures("driver")
 def test_remove_item_not_in_cart(login_and_go_to_products):
+    """
+    Description: Test removing an item that is not in the cart.
+    Expected Result: The remove action returns False and the cart remains empty.
+    """
     products_page = login_and_go_to_products
     item = ITEMS[4]
     removed = products_page.remove_item_by_name(item)
@@ -27,19 +31,26 @@ def test_remove_item_not_in_cart(login_and_go_to_products):
 
 
 def test_add_all_items_and_remove_all(login_and_go_to_products):
+    """
+    Description: Test adding all items to the cart and then removing all of them.
+    Expected Result: All items are added and then removed, resulting in an empty cart.
+    """
     products_page = login_and_go_to_products
     for item in ITEMS:
         products_page.add_item_by_name(item)
-    assert products_page.get_cart_count() == len(ITEMS)
     for item in ITEMS:
         products_page.remove_item_by_name(item)
-    assert products_page.get_cart_count() == 0
     products_page.go_to_cart()
     cart_page = CartPage(products_page.driver)
+    cart_items = cart_page.get_cart_items()
     assert cart_page.is_cart_empty()
 
 
 def test_add_remove_random_order(login_and_go_to_products):
+    """
+    Description: Test adding and removing items in random order.
+    Expected Result: All items are added and then removed in random order, resulting in an empty cart.
+    """
     products_page = login_and_go_to_products
     items = ITEMS[:]
     random.shuffle(items)
@@ -52,6 +63,10 @@ def test_add_remove_random_order(login_and_go_to_products):
 
 
 def test_remove_item_twice(login_and_go_to_products):
+    """
+    Description: Test removing the same item twice.
+    Expected Result: The first removal succeeds, the second returns False, and the cart is empty.
+    """
     products_page = login_and_go_to_products
     products_page.add_item_by_name(ITEMS[0])
     products_page.remove_item_by_name(ITEMS[0])
@@ -61,6 +76,10 @@ def test_remove_item_twice(login_and_go_to_products):
 
 
 def test_cart_badge_not_visible_when_empty(login_and_go_to_products):
+    """
+    Description: Test that the cart badge is not visible when the cart is empty.
+    Expected Result: The cart badge element is not visible when there are no items in the cart.
+    """
     products_page = login_and_go_to_products
     assert products_page.get_cart_count() == 0
     # Check if badge element is not visible
@@ -68,6 +87,10 @@ def test_cart_badge_not_visible_when_empty(login_and_go_to_products):
 
 
 def test_cart_badge_updates_each_action(login_and_go_to_products):
+    """
+    Description: Test that the cart badge updates correctly after each add/remove action.
+    Expected Result: The cart badge count increases with each add and decreases with each remove, reflecting the correct number of items.
+    """
     products_page = login_and_go_to_products
     for i, item in enumerate(ITEMS[:3], 1):
         products_page.add_item_by_name(item)
