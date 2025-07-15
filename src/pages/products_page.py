@@ -29,6 +29,9 @@ class ProductsPage(BasePage):
 
     def add_item_by_name(self, item_name):
         """Add an item to the cart by its name. Returns True if successful."""
+        from selenium.webdriver.support.ui import WebDriverWait
+        import selenium.common.exceptions
+
         logger = logging.getLogger(__name__)
         items = self.driver.find_elements(*self.ITEM_NAMES)
         for item in items:
@@ -42,11 +45,24 @@ class ProductsPage(BasePage):
                     add_btn = parent.find_element(
                         By.XPATH, f".//button[@data-test='{data_test}']"
                     )
+                    prev_count = self.get_cart_count()
                     add_btn.click()
                     logger.info(
                         f"[add_item_by_name] Clicked add button for '{item_name}'"
                     )
-                    return True
+                    try:
+                        WebDriverWait(self.driver, 5).until(
+                            lambda d: self.get_cart_count() == prev_count + 1
+                        )
+                        logger.info(
+                            f"[add_item_by_name] Cart count updated to {self.get_cart_count()} after add."
+                        )
+                        return True
+                    except selenium.common.exceptions.TimeoutException:
+                        logger.warning(
+                            f"[add_item_by_name] Cart count did not update after adding '{item_name}'."
+                        )
+                        return False
                 except Exception as e:
                     logger.warning(
                         f"[add_item_by_name] Could not find/click add button for '{item_name}': {e}"
@@ -57,6 +73,9 @@ class ProductsPage(BasePage):
 
     def remove_item_by_name(self, item_name):
         """Remove an item from the cart by its name. Returns True if successful."""
+        from selenium.webdriver.support.ui import WebDriverWait
+        import selenium.common.exceptions
+
         logger = logging.getLogger(__name__)
         items = self.driver.find_elements(*self.ITEM_NAMES)
         for item in items:
@@ -70,11 +89,24 @@ class ProductsPage(BasePage):
                     remove_btn = parent.find_element(
                         By.XPATH, f".//button[@data-test='{data_test}']"
                     )
+                    prev_count = self.get_cart_count()
                     remove_btn.click()
                     logger.info(
                         f"[remove_item_by_name] Clicked remove button for '{item_name}'"
                     )
-                    return True
+                    try:
+                        WebDriverWait(self.driver, 5).until(
+                            lambda d: self.get_cart_count() == max(prev_count - 1, 0)
+                        )
+                        logger.info(
+                            f"[remove_item_by_name] Cart count updated to {self.get_cart_count()} after remove."
+                        )
+                        return True
+                    except selenium.common.exceptions.TimeoutException:
+                        logger.warning(
+                            f"[remove_item_by_name] Cart count did not update after removing '{item_name}'."
+                        )
+                        return False
                 except Exception as e:
                     logger.warning(
                         f"[remove_item_by_name] Could not find/click remove button for '{item_name}': {e}"
