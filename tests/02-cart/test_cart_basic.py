@@ -25,14 +25,19 @@ def test_add_single_item_to_cart(login_and_go_to_products):
     Description: Test adding a single item to the cart and verifying it appears in the cart.
     Expected Result: The item is added to the cart and appears in the cart items list.
     """
+    logger.info("[test_add_single_item_to_cart] Starting test: add single item")
     products_page = login_and_go_to_products
     item = ITEMS[0]
-    logger.info(f"Adding item: {item}")
+    logger.info(f"[test_add_single_item_to_cart] Adding item: {item}")
     products_page.add_item_by_name(item)
     assert products_page.get_cart_count() == 1
+    logger.info("[test_add_single_item_to_cart] Cart count is 1 after add")
     products_page.go_to_cart()
     cart_page = CartPage(products_page.driver)
-    assert item in cart_page.get_cart_items()
+    cart_items = cart_page.get_cart_items()
+    logger.info(f"[test_add_single_item_to_cart] Cart items: {cart_items}")
+    assert item in cart_items
+    logger.info("[test_add_single_item_to_cart] Item found in cart. Test passed.")
 
 
 @pytest.mark.usefixtures("driver")
@@ -41,15 +46,23 @@ def test_add_multiple_items_to_cart(login_and_go_to_products):
     Description: Test adding multiple items to the cart and verifying all appear in the cart.
     Expected Result: All added items appear in the cart items list.
     """
+    logger.info("[test_add_multiple_items_to_cart] Starting test: add multiple items")
     products_page = login_and_go_to_products
     for item in ITEMS[:3]:
-        logger.info(f"Adding item: {item}")
+        logger.info(f"[test_add_multiple_items_to_cart] Adding item: {item}")
         products_page.add_item_by_name(item)
     assert products_page.get_cart_count() == 3
+    logger.info("[test_add_multiple_items_to_cart] Cart count is 3 after adds")
     products_page.go_to_cart()
     cart_page = CartPage(products_page.driver)
+    cart_items = cart_page.get_cart_items()
+    logger.info(f"[test_add_multiple_items_to_cart] Cart items: {cart_items}")
     for item in ITEMS[:3]:
-        assert item in cart_page.get_cart_items()
+        assert item in cart_items
+        logger.info(f"[test_add_multiple_items_to_cart] {item} found in cart.")
+    logger.info(
+        "[test_add_multiple_items_to_cart] All items found in cart. Test passed."
+    )
 
 
 @pytest.mark.usefixtures("driver")
@@ -58,14 +71,19 @@ def test_remove_item_from_cart(login_and_go_to_products):
     Description: Test removing an item from the cart and verifying it no longer appears.
     Expected Result: The removed item does not appear in the cart items list.
     """
+    logger.info("[test_remove_item_from_cart] Starting test: remove item")
     products_page = login_and_go_to_products
     item = ITEMS[1]
+    logger.info(f"[test_remove_item_from_cart] Adding item: {item}")
     products_page.add_item_by_name(item)
+    logger.info(f"[test_remove_item_from_cart] Removing item: {item}")
     products_page.remove_item_by_name(item)
     products_page.go_to_cart()
     cart_page = CartPage(products_page.driver)
     cart_items = cart_page.get_cart_items()
+    logger.info(f"[test_remove_item_from_cart] Cart items after remove: {cart_items}")
     assert item not in cart_items
+    logger.info("[test_remove_item_from_cart] Item not found in cart. Test passed.")
 
 
 @pytest.mark.usefixtures("driver")
@@ -74,11 +92,24 @@ def test_add_same_item_multiple_times(login_and_go_to_products):
     Description: Test adding the same item multiple times does not duplicate it in the cart.
     Expected Result: The item appears only once in the cart items list, regardless of how many times it is added.
     """
+    logger.info(
+        "[test_add_same_item_multiple_times] Starting test: add same item multiple times"
+    )
     products_page = login_and_go_to_products
     item = ITEMS[0]
+    logger.info(f"[test_add_same_item_multiple_times] Adding item: {item}")
     products_page.add_item_by_name(item)
+    logger.info(f"[test_add_same_item_multiple_times] Adding item again: {item}")
     products_page.add_item_by_name(item)  # Should not duplicate
     assert products_page.get_cart_count() == 1
+    logger.info(
+        "[test_add_same_item_multiple_times] Cart count is 1 after duplicate adds"
+    )
     products_page.go_to_cart()
     cart_page = CartPage(products_page.driver)
-    assert cart_page.get_cart_items().count(item) == 1
+    cart_items = cart_page.get_cart_items()
+    logger.info(f"[test_add_same_item_multiple_times] Cart items: {cart_items}")
+    assert cart_items.count(item) == 1
+    logger.info(
+        "[test_add_same_item_multiple_times] Item appears only once in cart. Test passed."
+    )

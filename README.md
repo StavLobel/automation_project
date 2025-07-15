@@ -28,9 +28,9 @@ src/
 
 tests/
   ├── conftest.py             # Global fixtures
-  ├── login/
+  ├── 01-login/
   │   └── test_login.py       # Login test suite
-  └── cart/
+  └── 02-cart/
       ├── conftest.py         # Cart-specific fixtures
       ├── test_cart_basic.py  # Basic cart tests
       ├── test_cart_edge.py   # Cart edge case tests
@@ -74,8 +74,8 @@ README.md                     # Project documentation
   ```
 - **Specific suite:**
   ```bash
-  pytest tests/login/
-  pytest tests/cart/test_cart_edge.py
+  pytest tests/01-login/
+  pytest tests/02-cart/test_cart_edge.py
   ```
 - **Generate HTML & JUnit reports:**
   ```bash
