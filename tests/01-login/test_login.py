@@ -16,7 +16,10 @@ SAUCE_PASSWORD = os.getenv("SAUCE_PASSWORD")
 
 @pytest.mark.usefixtures("driver")
 def test_login_valid(driver):
-    """Test logging in with valid credentials."""
+    """
+    Description: Test logging in with valid credentials.
+    Expected Result: User is successfully logged in and redirected to the inventory page.
+    """
     logger.info("[test_login_valid] Starting valid login test")
     logger.info(
         f"[test_login_valid] Using credentials: username='{SAUCE_USERNAME}', password='***'"
@@ -32,7 +35,10 @@ def test_login_valid(driver):
 
 @pytest.mark.usefixtures("driver")
 def test_login_invalid(driver):
-    """Test logging in with invalid credentials shows an error message."""
+    """
+    Description: Test logging in with invalid credentials.
+    Expected Result: An error message is displayed indicating invalid username or password.
+    """
     username = "invalid_user"
     password = "wrong_pass"
     logger.info("[test_login_invalid] Starting invalid login test")
@@ -55,7 +61,10 @@ def test_login_invalid(driver):
 
 
 def test_login_empty_fields(driver):
-    """Test logging in with empty username and password fields shows an error message."""
+    """
+    Description: Test logging in with empty username and password fields.
+    Expected Result: An error message is displayed indicating that the username is required.
+    """
     username = ""
     password = ""
     logger.info("[test_login_empty_fields] Starting empty fields login test")
@@ -74,7 +83,10 @@ def test_login_empty_fields(driver):
 
 
 def test_login_empty_username(driver):
-    """Test logging in with an empty username shows an error message."""
+    """
+    Description: Test logging in with an empty username.
+    Expected Result: An error message is displayed indicating that the username is required.
+    """
     username = ""
     password = "somepassword"
     logger.info("[test_login_empty_username] Starting empty username login test")
@@ -93,7 +105,10 @@ def test_login_empty_username(driver):
 
 
 def test_login_empty_password(driver):
-    """Test logging in with an empty password shows an error message."""
+    """
+    Description: Test logging in with an empty password.
+    Expected Result: An error message is displayed indicating that the password is required.
+    """
     username = "someuser"
     password = ""
     logger.info("[test_login_empty_password] Starting empty password login test")
@@ -112,7 +127,10 @@ def test_login_empty_password(driver):
 
 
 def test_login_locked_out_user(driver):
-    """Test logging in as a locked out user shows an error message."""
+    """
+    Description: Test logging in as a locked out user.
+    Expected Result: An error message is displayed indicating the user is locked out.
+    """
     username = "locked_out_user"
     password = SAUCE_PASSWORD
     logger.info("[test_login_locked_out_user] Starting locked out user login test")
@@ -133,7 +151,10 @@ def test_login_locked_out_user(driver):
 
 
 def test_login_invalid_characters(driver):
-    """Test logging in with invalid/special characters shows an error message."""
+    """
+    Description: Test logging in with invalid/special characters in username and password.
+    Expected Result: An error message is displayed indicating invalid credentials.
+    """
     username = "!@#$%^&*()"
     password = "<script>alert(1)</script>"
     logger.info(

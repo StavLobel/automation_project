@@ -18,6 +18,10 @@ ITEMS = [
 
 @pytest.mark.usefixtures("driver")
 def test_cart_persistence_after_refresh(login_and_go_to_products):
+    """
+    Description: Test that the cart retains items after a page refresh.
+    Expected Result: The item remains in the cart after refreshing the page.
+    """
     products_page = login_and_go_to_products
     products_page.add_item_by_name(ITEMS[0])
     products_page.driver.refresh()
@@ -29,6 +33,10 @@ def test_cart_persistence_after_refresh(login_and_go_to_products):
 
 @pytest.mark.usefixtures("driver")
 def test_cart_persistence_after_navigation(login_and_go_to_products):
+    """
+    Description: Test that the cart retains items after navigating away and back to the products page.
+    Expected Result: The item remains in the cart after navigation.
+    """
     products_page = login_and_go_to_products
     products_page.add_item_by_name(ITEMS[1])
     products_page.driver.get("https://www.saucedemo.com/inventory.html")
@@ -39,6 +47,10 @@ def test_cart_persistence_after_navigation(login_and_go_to_products):
 
 
 def test_continue_shopping_from_cart(login_and_go_to_products):
+    """
+    Description: Test the 'Continue Shopping' button from the cart page.
+    Expected Result: User is returned to the products page and the cart retains its items.
+    """
     products_page = login_and_go_to_products
     products_page.add_item_by_name(ITEMS[0])
     products_page.go_to_cart()
@@ -49,6 +61,10 @@ def test_continue_shopping_from_cart(login_and_go_to_products):
 
 
 def test_checkout_and_return_to_cart(login_and_go_to_products):
+    """
+    Description: Test that items remain in the cart after starting checkout and returning to the cart page.
+    Expected Result: The item remains in the cart after visiting the checkout page and returning.
+    """
     products_page = login_and_go_to_products
     products_page.add_item_by_name(ITEMS[0])
     products_page.go_to_cart()
@@ -60,6 +76,10 @@ def test_checkout_and_return_to_cart(login_and_go_to_products):
 
 
 def test_cart_persistence_after_clearing_cookies(login_and_go_to_products):
+    """
+    Description: Test cart behavior after clearing cookies and refreshing.
+    Expected Result: The cart is emptied or the user is logged out after cookies are cleared and the page is refreshed.
+    """
     products_page = login_and_go_to_products
     products_page.add_item_by_name(ITEMS[0])
     products_page.driver.delete_all_cookies()
