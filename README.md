@@ -55,7 +55,6 @@ README.md                     # Project documentation
 2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
-   pip install pytest-html
    ```
 3. **Set up environment variables**
    - Create a `.env` file in the root directory:
@@ -78,6 +77,8 @@ README.md                     # Project documentation
   pytest tests/02-cart/test_cart_edge.py
   ```
 - **Generate HTML & JUnit reports:**
+  
+  Requires `pytest-html` (already included in requirements.txt):
   ```bash
   pytest tests/ --junitxml=pytest-report.xml --html=pytest-report.html --self-contained-html --capture=tee-sys --log-cli-level=INFO
   ```

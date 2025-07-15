@@ -4,3 +4,4 @@ webdriver-manager
 black
 python-dotenv
 pre-commit
+pytest-html

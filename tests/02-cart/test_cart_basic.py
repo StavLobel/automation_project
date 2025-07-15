@@ -5,6 +5,8 @@ import pytest
 import logging
 from src.pages.cart_page import CartPage
 from src.pages.products_page import ProductsPage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +31,7 @@ def test_add_single_item_to_cart(login_and_go_to_products):
     products_page = login_and_go_to_products
     item = ITEMS[0]
     logger.info(f"[test_add_single_item_to_cart] Adding item: {item}")
-    products_page.add_item_by_name(item)
+    assert products_page.add_item_by_name(item), f"Failed to add item: {item}"
     assert products_page.get_cart_count() == 1
     logger.info("[test_add_single_item_to_cart] Cart count is 1 after add")
     products_page.go_to_cart()
@@ -50,7 +52,7 @@ def test_add_multiple_items_to_cart(login_and_go_to_products):
     products_page = login_and_go_to_products
     for item in ITEMS[:3]:
         logger.info(f"[test_add_multiple_items_to_cart] Adding item: {item}")
-        products_page.add_item_by_name(item)
+        assert products_page.add_item_by_name(item), f"Failed to add item: {item}"
     assert products_page.get_cart_count() == 3
     logger.info("[test_add_multiple_items_to_cart] Cart count is 3 after adds")
     products_page.go_to_cart()
@@ -75,9 +77,9 @@ def test_remove_item_from_cart(login_and_go_to_products):
     products_page = login_and_go_to_products
     item = ITEMS[1]
     logger.info(f"[test_remove_item_from_cart] Adding item: {item}")
-    products_page.add_item_by_name(item)
+    assert products_page.add_item_by_name(item), f"Failed to add item: {item}"
     logger.info(f"[test_remove_item_from_cart] Removing item: {item}")
-    products_page.remove_item_by_name(item)
+    assert products_page.remove_item_by_name(item), f"Failed to remove item: {item}"
     products_page.go_to_cart()
     cart_page = CartPage(products_page.driver)
     cart_items = cart_page.get_cart_items()
@@ -98,9 +100,17 @@ def test_add_same_item_multiple_times(login_and_go_to_products):
     products_page = login_and_go_to_products
     item = ITEMS[0]
     logger.info(f"[test_add_same_item_multiple_times] Adding item: {item}")
-    products_page.add_item_by_name(item)
+    assert products_page.add_item_by_name(item), f"Failed to add item: {item}"
+    WebDriverWait(products_page.driver, 5).until(
+        lambda d: products_page.get_cart_count() == 1
+    )
     logger.info(f"[test_add_same_item_multiple_times] Adding item again: {item}")
-    products_page.add_item_by_name(item)  # Should not duplicate
+    assert not products_page.add_item_by_name(
+        item
+    ), f"Second add should fail for item: {item}"
+    WebDriverWait(products_page.driver, 5).until(
+        lambda d: products_page.get_cart_count() == 1
+    )
     assert products_page.get_cart_count() == 1
     logger.info(
         "[test_add_same_item_multiple_times] Cart count is 1 after duplicate adds"
