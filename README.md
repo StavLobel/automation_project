@@ -2,6 +2,14 @@
 
 **Enterprise-grade UI automation testing for web applications using Python, Selenium, and Pytest**
 
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![Selenium](https://img.shields.io/badge/Selenium-4.x-green.svg)](https://selenium-python.readthedocs.io/)
+[![Pytest](https://img.shields.io/badge/Pytest-Latest-orange.svg)](https://docs.pytest.org/)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI/CD-blue.svg)](https://github.com/features/actions)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Code Style](https://img.shields.io/badge/Code%20Style-Black-black.svg)](https://github.com/psf/black)
+[![Pre-commit](https://img.shields.io/badge/Pre--commit-Enabled-green.svg)](https://pre-commit.com/)
+
 ---
 
 ## 🎯 About This Project
